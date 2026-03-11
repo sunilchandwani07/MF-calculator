@@ -51,20 +51,20 @@ export const SWPCalculator: React.FC = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
         <div className="space-y-6">
           <div>
             <div className="flex justify-between mb-2">
               <label className="input-label">Total Lumpsum Investment</label>
               <div className="flex items-center gap-2">
-                <span className="text-slate-400 text-sm">₹</span>
+                <span className="text-slate-500 dark:text-slate-400 text-sm">₹</span>
                 <input 
                   type="number"
                   min="10000"
                   max="100000000"
                   value={lumpsum}
                   onChange={(e) => setLumpsum(Number(e.target.value))}
-                  className="w-32 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                  className="w-32 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                 />
               </div>
             </div>
@@ -75,7 +75,7 @@ export const SWPCalculator: React.FC = () => {
               step="10000"
               value={lumpsum}
               onChange={(e) => setLumpsum(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
             />
           </div>
 
@@ -83,14 +83,14 @@ export const SWPCalculator: React.FC = () => {
             <div className="flex justify-between mb-2">
               <label className="input-label">Initial Monthly Withdrawal</label>
               <div className="flex items-center gap-2">
-                <span className="text-slate-400 text-sm">₹</span>
+                <span className="text-slate-500 dark:text-slate-400 text-sm">₹</span>
                 <input 
                   type="number"
                   min="500"
                   max={lumpsum / 2}
                   value={withdrawal}
                   onChange={(e) => setWithdrawal(Number(e.target.value))}
-                  className="w-24 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                  className="w-24 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                 />
               </div>
             </div>
@@ -101,7 +101,7 @@ export const SWPCalculator: React.FC = () => {
               step="500"
               value={withdrawal}
               onChange={(e) => setWithdrawal(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
             />
           </div>
 
@@ -117,7 +117,7 @@ export const SWPCalculator: React.FC = () => {
                     value={rate}
                     step="0.5"
                     onChange={(e) => setRate(Number(e.target.value))}
-                    className="w-12 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                    className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                   />
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
@@ -129,7 +129,7 @@ export const SWPCalculator: React.FC = () => {
                 step="0.5"
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
               />
             </div>
 
@@ -144,7 +144,7 @@ export const SWPCalculator: React.FC = () => {
                     value={inflation}
                     step="0.5"
                     onChange={(e) => setInflation(Number(e.target.value))}
-                    className="w-12 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                    className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                   />
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
@@ -156,7 +156,7 @@ export const SWPCalculator: React.FC = () => {
                 step="0.5"
                 value={inflation}
                 onChange={(e) => setInflation(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
               />
             </div>
           </div>
@@ -197,24 +197,24 @@ export const SWPCalculator: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-4 bg-blue-50 rounded-xl border border-blue-100"
               >
-                <p className="text-[10px] text-blue-600 uppercase font-bold mb-1">Normal Scenario</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400 uppercase font-bold mb-1">Normal Scenario</p>
                 <div className="space-y-1">
-                  <p className="text-xs text-slate-500">Final Balance</p>
-                  <p className="text-lg font-bold text-blue-700">{formatCurrency(results.finalBalance)}</p>
-                  <p className="text-[10px] text-slate-400">Total Withdrawn: {formatCurrency(results.totalWithdrawn)}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Final Balance</p>
+                  <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{formatCurrency(results.finalBalance)}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">Total Withdrawn: {formatCurrency(results.totalWithdrawn)}</p>
                 </div>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="p-4 bg-red-50 rounded-xl border border-red-100"
+                className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30"
               >
-                <p className="text-[10px] text-red-600 uppercase font-bold mb-1">Stress Scenario</p>
+                <p className="text-xs text-red-600 dark:text-red-400 uppercase font-bold mb-1">Stress Scenario</p>
                 <div className="space-y-1">
-                  <p className="text-xs text-slate-500">Final Balance</p>
-                  <p className="text-lg font-bold text-red-700">{formatCurrency(stressResults.finalBalance)}</p>
-                  <p className="text-[10px] text-slate-400">Total Withdrawn: {formatCurrency(stressResults.totalWithdrawn)}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Final Balance</p>
+                  <p className="text-lg font-bold text-red-700 dark:text-red-400">{formatCurrency(stressResults.finalBalance)}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">Total Withdrawn: {formatCurrency(stressResults.totalWithdrawn)}</p>
                 </div>
               </motion.div>
             </div>
@@ -253,26 +253,26 @@ export const SWPCalculator: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-3">
-                <p className="text-[10px] font-bold text-blue-600 uppercase text-center">Normal Market</p>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <p className="text-[9px] text-slate-500 uppercase font-bold">Safety (90% Cap)</p>
-                  <p className="text-md font-bold text-slate-700">{formatCurrency(maxWithdrawal.maxWithdrawalCase1)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
+                <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase text-center">Normal Market</p>
+                <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Safety (90% Cap)</p>
+                  <p className="text-md font-bold text-slate-700 dark:text-slate-200">{formatCurrency(maxWithdrawal.maxWithdrawalCase1)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <p className="text-[9px] text-slate-500 uppercase font-bold">Zero Balance</p>
-                  <p className="text-md font-bold text-slate-700">{formatCurrency(maxWithdrawal.maxWithdrawalCase2)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
+                <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Zero Balance</p>
+                  <p className="text-md font-bold text-slate-700 dark:text-slate-200">{formatCurrency(maxWithdrawal.maxWithdrawalCase2)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <p className="text-[10px] font-bold text-red-600 uppercase text-center">Stress Scenario</p>
-                <div className="p-3 bg-red-50/50 rounded-xl border border-red-100">
-                  <p className="text-[9px] text-red-600 uppercase font-bold">Safety (90% Cap)</p>
-                  <p className="text-md font-bold text-red-700">{formatCurrency(stressMaxWithdrawal.maxWithdrawalCase1)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
+                <p className="text-xs font-bold text-red-600 dark:text-red-400 uppercase text-center">Stress Scenario</p>
+                <div className="p-3 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30">
+                  <p className="text-[10px] text-red-600 dark:text-red-400 uppercase font-bold">Safety (90% Cap)</p>
+                  <p className="text-md font-bold text-red-700 dark:text-red-400">{formatCurrency(stressMaxWithdrawal.maxWithdrawalCase1)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
                 </div>
-                <div className="p-3 bg-red-50/50 rounded-xl border border-red-100">
-                  <p className="text-[9px] text-red-600 uppercase font-bold">Zero Balance</p>
-                  <p className="text-md font-bold text-red-700">{formatCurrency(stressMaxWithdrawal.maxWithdrawalCase2)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
+                <div className="p-3 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30">
+                  <p className="text-[10px] text-red-600 dark:text-red-400 uppercase font-bold">Zero Balance</p>
+                  <p className="text-md font-bold text-red-700 dark:text-red-400">{formatCurrency(stressMaxWithdrawal.maxWithdrawalCase2)}<span className="text-[10px] font-normal ml-1">/mo</span></p>
                 </div>
               </div>
             </div>

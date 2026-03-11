@@ -12,12 +12,12 @@
   --color-slate-200: #e2e8f0;
   --color-slate-300: #cbd5e1;
   --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1e293b;
-  --color-slate-900: #0f172a;
-  --color-slate-950: #020617;
+  --color-slate-500: #475569; /* Darkened from #64748b */
+  --color-slate-600: #334155; /* Darkened from #475569 */
+  --color-slate-700: #1e293b; /* Darkened from #334155 */
+  --color-slate-800: #0f172a; /* Darkened from #1e293b */
+  --color-slate-900: #020617; /* Darkened from #0f172a */
+  --color-slate-950: #010409;
   
   --color-blue-50: #eff6ff;
   --color-blue-100: #dbeafe;
@@ -114,21 +114,33 @@
 }
 
 @layer base {
+  html {
+    font-size: var(--app-font-size);
+  }
+
+  :root {
+    --app-font-size: 16px;
+  }
+  
   body {
-    @apply bg-slate-50 text-slate-900 font-sans;
+    @apply bg-slate-50 text-slate-900 font-sans transition-colors duration-300;
+  }
+
+  .dark body {
+    @apply bg-slate-950 text-slate-100;
   }
 }
 
 .calculator-card {
-  @apply bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden;
+  @apply bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors;
 }
 
 .input-label {
-  @apply block text-sm font-medium text-slate-700 mb-1;
+  @apply block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1;
 }
 
 .input-field {
-  @apply w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-blue focus:border-transparent outline-none transition-all;
+  @apply w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-blue focus:border-transparent outline-none transition-all;
 }
 
 .btn-primary {
@@ -136,5 +148,5 @@
 }
 
 .btn-secondary {
-  @apply px-6 py-2 bg-white text-slate-700 border border-slate-200 rounded-lg font-semibold hover:bg-slate-50 active:scale-95 transition-all;
+  @apply px-6 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition-all;
 }

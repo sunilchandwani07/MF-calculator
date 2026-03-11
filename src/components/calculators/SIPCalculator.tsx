@@ -74,17 +74,17 @@ export const SIPCalculator: React.FC = () => {
   return (
     <div className="p-4 md:p-8">
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 bg-slate-100 p-1 rounded-xl w-fit">
+      <div className="flex gap-2 mb-6 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
         {(['standard', 'stepup', 'homeloan'] as const).map((tab) => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'text-brand-blue' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'text-brand-blue' : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
           >
             {activeTab === tab && (
               <motion.div 
                 layoutId="activeTab"
-                className="absolute inset-0 bg-white rounded-lg shadow-sm"
+                className="absolute inset-0 bg-white dark:bg-slate-700 rounded-lg shadow-sm"
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
               />
             )}
@@ -97,7 +97,7 @@ export const SIPCalculator: React.FC = () => {
 
       <motion.div 
         layout
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"
       >
         <div className="space-y-6">
           <AnimatePresence mode="wait">
@@ -113,17 +113,17 @@ export const SIPCalculator: React.FC = () => {
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                       <label className="input-label">Interest Calculation Type</label>
-                      <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
+                      <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg w-fit">
                         {(['reducing', 'fixed'] as const).map((type) => (
                           <button 
                             key={type}
                             onClick={() => setLoanInterestType(type)}
-                            className={`relative px-3 py-1 rounded-md text-xs font-bold transition-all ${loanInterestType === type ? 'text-brand-blue' : 'text-slate-500'}`}
+                            className={`relative px-3 py-1 rounded-md text-xs font-bold transition-all ${loanInterestType === type ? 'text-brand-blue' : 'text-slate-600 dark:text-slate-400'}`}
                           >
                             {loanInterestType === type && (
                               <motion.div 
                                 layoutId="loanInterestType"
-                                className="absolute inset-0 bg-white rounded-md shadow-sm"
+                                className="absolute inset-0 bg-white dark:bg-slate-700 rounded-md shadow-sm"
                                 transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                               />
                             )}
@@ -139,12 +139,12 @@ export const SIPCalculator: React.FC = () => {
                     <div className="flex justify-between mb-2">
                       <label className="input-label">Loan Amount</label>
                       <div className="flex items-center gap-2">
-                        <span className="text-slate-400 text-sm">₹</span>
+                        <span className="text-slate-500 dark:text-slate-400 text-sm">₹</span>
                         <input 
                           type="number"
                           value={loanAmount}
                           onChange={(e) => setLoanAmount(Number(e.target.value))}
-                          className="w-32 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none transition-colors"
+                          className="w-32 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none transition-colors"
                         />
                       </div>
                     </div>
@@ -152,7 +152,7 @@ export const SIPCalculator: React.FC = () => {
                       type="range" min="100000" max="20000000" step="100000"
                       value={loanAmount}
                       onChange={(e) => setLoanAmount(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
                     />
                   </div>
                   <div>
@@ -162,7 +162,7 @@ export const SIPCalculator: React.FC = () => {
                         <input 
                           type="number" value={loanRate} step="0.1"
                           onChange={(e) => setLoanRate(Number(e.target.value))}
-                          className="w-16 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none transition-colors"
+                          className="w-16 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none transition-colors"
                         />
                         <span className="text-brand-blue font-bold">%</span>
                       </div>
@@ -171,7 +171,7 @@ export const SIPCalculator: React.FC = () => {
                       type="range" min="5" max="15" step="0.1"
                       value={loanRate}
                       onChange={(e) => setLoanRate(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
                     />
                   </div>
                   <div>
@@ -181,7 +181,7 @@ export const SIPCalculator: React.FC = () => {
                         <input 
                           type="number" value={loanTenure}
                           onChange={(e) => setLoanTenure(Number(e.target.value))}
-                          className="w-12 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none transition-colors"
+                          className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none transition-colors"
                         />
                         <span className="text-brand-blue font-bold">Yr</span>
                       </div>
@@ -190,7 +190,7 @@ export const SIPCalculator: React.FC = () => {
                       type="range" min="1" max="30"
                       value={loanTenure}
                       onChange={(e) => setLoanTenure(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
                     />
                   </div>
                 </div>
@@ -200,14 +200,14 @@ export const SIPCalculator: React.FC = () => {
                     <div className="flex justify-between mb-2">
                       <label className="input-label">Monthly Investment</label>
                       <div className="flex items-center gap-2">
-                        <span className="text-slate-400 text-sm">₹</span>
+                        <span className="text-slate-500 dark:text-slate-400 text-sm">₹</span>
                         <input 
                           type="number"
                           min="500"
                           max="1000000"
                           value={monthlyInvestment}
                           onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                          className="w-24 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none transition-colors"
+                          className="w-24 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none transition-colors"
                         />
                       </div>
                     </div>
@@ -218,7 +218,7 @@ export const SIPCalculator: React.FC = () => {
                       step="500"
                       value={monthlyInvestment}
                       onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
                     />
                   </div>
 
@@ -230,7 +230,7 @@ export const SIPCalculator: React.FC = () => {
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                         <label className="input-label">Annual Step-up</label>
-                        <div className="flex bg-slate-100 p-1 rounded-lg w-fit">
+                        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg w-fit">
                           {(['percentage', 'fixed'] as const).map((type) => (
                             <button 
                               key={type}
@@ -239,12 +239,12 @@ export const SIPCalculator: React.FC = () => {
                                 if (type === 'percentage' && stepUp > 100) setStepUp(10);
                                 if (type === 'fixed' && stepUp <= 100) setStepUp(1000);
                               }}
-                              className={`relative px-3 py-1 rounded-md text-xs font-bold transition-all ${stepUpType === type ? 'text-brand-blue' : 'text-slate-500'}`}
+                              className={`relative px-3 py-1 rounded-md text-xs font-bold transition-all ${stepUpType === type ? 'text-brand-blue' : 'text-slate-600 dark:text-slate-400'}`}
                             >
                               {stepUpType === type && (
                                 <motion.div 
                                   layoutId="stepUpType"
-                                  className="absolute inset-0 bg-white rounded-md shadow-sm"
+                                  className="absolute inset-0 bg-white dark:bg-slate-700 rounded-md shadow-sm"
                                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                                 />
                               )}
@@ -257,7 +257,7 @@ export const SIPCalculator: React.FC = () => {
                       </div>
                       
                       <div className="flex justify-between mb-2">
-                        <span className="text-xs text-slate-500">Amount to increase every year</span>
+                        <span className="text-xs text-slate-600 dark:text-slate-400">Amount to increase every year</span>
                         <div className="flex items-center gap-1">
                           {stepUpType === 'fixed' && <span className="text-brand-blue font-bold">₹</span>}
                           <input 
@@ -266,7 +266,7 @@ export const SIPCalculator: React.FC = () => {
                             max={stepUpType === 'percentage' ? 100 : 1000000}
                             value={stepUp}
                             onChange={(e) => setStepUp(Number(e.target.value))}
-                            className="w-20 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none transition-colors"
+                            className="w-20 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none transition-colors"
                           />
                           {stepUpType === 'percentage' && <span className="text-brand-blue font-bold">%</span>}
                         </div>
@@ -278,7 +278,7 @@ export const SIPCalculator: React.FC = () => {
                         step={stepUpType === 'percentage' ? 1 : 500}
                         value={stepUp}
                         onChange={(e) => setStepUp(Number(e.target.value))}
-                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                        className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
                       />
                     </motion.div>
                   )}
@@ -345,28 +345,28 @@ export const SIPCalculator: React.FC = () => {
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-slate-50 rounded-xl border border-slate-100"
+                  className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700"
                 >
-                  <p className="text-xs text-slate-500 uppercase font-semibold mb-1">Invested</p>
-                  <p className="text-lg font-bold text-slate-800">{formatCurrency(results.totalInvestment)}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold mb-1">Invested</p>
+                  <p className="text-lg font-bold text-slate-800 dark:text-slate-100">{formatCurrency(results.totalInvestment)}</p>
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="p-4 bg-slate-50 rounded-xl border border-slate-100"
+                  className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700"
                 >
-                  <p className="text-xs text-slate-500 uppercase font-semibold mb-1">Returns</p>
-                  <p className="text-lg font-bold text-brand-purple">{formatCurrency(results.estimatedReturns)}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold mb-1">Returns</p>
+                  <p className="text-lg font-bold text-brand-purple dark:text-purple-400">{formatCurrency(results.estimatedReturns)}</p>
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="p-4 bg-blue-50 rounded-xl border border-blue-100"
+                  className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-900/30"
                 >
-                  <p className="text-xs text-blue-600 uppercase font-semibold mb-1">Total Value</p>
-                  <p className="text-lg font-bold text-brand-blue">{formatCurrency(results.futureValue)}</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 uppercase font-semibold mb-1">Total Value</p>
+                  <p className="text-lg font-bold text-brand-blue dark:text-blue-400">{formatCurrency(results.futureValue)}</p>
                 </motion.div>
               </div>
             ) : (
@@ -392,11 +392,11 @@ export const SIPCalculator: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="p-4 bg-green-50 rounded-xl border border-green-100 sm:col-span-2"
+                  className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-900/30 sm:col-span-2"
                 >
-                  <p className="text-xs text-green-600 uppercase font-semibold mb-1">Required Monthly SIP</p>
-                  <p className="text-lg font-bold text-green-700">{formatCurrency(homeLoanResults.sipRequired)}</p>
-                  <p className="text-[10px] text-green-600 mt-1">To recover interest in {loanTenure} years @ {rate}%</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 uppercase font-semibold mb-1">Required Monthly SIP</p>
+                  <p className="text-lg font-bold text-green-700 dark:text-green-400">{formatCurrency(homeLoanResults.sipRequired)}</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">To recover interest in {loanTenure} years @ {rate}%</p>
                 </motion.div>
               </div>
             )}
@@ -439,13 +439,13 @@ export const SIPCalculator: React.FC = () => {
                     <span className="text-sm font-semibold uppercase tracking-wider">Cost of Delay</span>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-orange-50 rounded-xl border border-orange-100">
-                      <p className="text-[10px] text-orange-600 uppercase font-bold">6 Months Delay</p>
-                      <p className="text-sm font-bold text-orange-700">{formatCurrency(delayResults.delay6.cost)}</p>
+                    <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-100 dark:border-orange-900/30">
+                      <p className="text-xs text-orange-600 dark:text-orange-400 uppercase font-bold">6 Months Delay</p>
+                      <p className="text-sm font-bold text-orange-700 dark:text-orange-400">{formatCurrency(delayResults.delay6.cost)}</p>
                     </div>
-                    <div className="p-3 bg-red-50 rounded-xl border border-red-100">
-                      <p className="text-[10px] text-red-600 uppercase font-bold">12 Months Delay</p>
-                      <p className="text-sm font-bold text-red-700">{formatCurrency(delayResults.delay12.cost)}</p>
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30">
+                      <p className="text-xs text-red-600 dark:text-red-400 uppercase font-bold">12 Months Delay</p>
+                      <p className="text-sm font-bold text-red-700 dark:text-red-400">{formatCurrency(delayResults.delay12.cost)}</p>
                     </div>
                   </div>
                 </div>

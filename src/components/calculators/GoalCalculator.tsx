@@ -63,20 +63,20 @@ export const GoalCalculator: React.FC = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-6 rounded-2xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
         <div className="space-y-6">
           <div>
             <div className="flex justify-between mb-2">
               <label className="input-label">Target Goal (Today's Value)</label>
               <div className="flex items-center gap-2">
-                <span className="text-slate-400 text-sm">₹</span>
+                <span className="text-slate-500 dark:text-slate-400 text-sm">₹</span>
                 <input 
                   type="number"
                   min="100000"
                   max="100000000"
                   value={targetAmount}
                   onChange={(e) => handleTargetChange(Number(e.target.value))}
-                  className="w-32 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                  className="w-32 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                 />
               </div>
             </div>
@@ -87,7 +87,7 @@ export const GoalCalculator: React.FC = () => {
               step="100000"
               value={targetAmount}
               onChange={(e) => handleTargetChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
             />
           </div>
 
@@ -103,7 +103,7 @@ export const GoalCalculator: React.FC = () => {
                     value={rate}
                     step="0.5"
                     onChange={(e) => handleRateChange(Number(e.target.value))}
-                    className="w-12 text-right font-bold text-brand-blue border-b border-slate-200 focus:border-brand-blue outline-none"
+                    className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
                   />
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
@@ -115,7 +115,7 @@ export const GoalCalculator: React.FC = () => {
                 step="0.5"
                 value={rate}
                 onChange={(e) => handleRateChange(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
               />
             </div>
             <div>
@@ -129,7 +129,7 @@ export const GoalCalculator: React.FC = () => {
                     value={inflation}
                     step="0.5"
                     onChange={(e) => handleInflationChange(Number(e.target.value))}
-                    className="w-12 text-right font-bold text-brand-purple border-b border-slate-200 focus:border-brand-purple outline-none"
+                    className="w-12 text-right font-bold text-brand-purple bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-purple outline-none"
                   />
                   <span className="text-brand-purple font-bold">%</span>
                 </div>
@@ -141,7 +141,7 @@ export const GoalCalculator: React.FC = () => {
                 step="0.5"
                 value={inflation}
                 onChange={(e) => handleInflationChange(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-purple"
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-purple"
               />
             </div>
           </div>
@@ -171,11 +171,11 @@ export const GoalCalculator: React.FC = () => {
             />
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-start gap-3">
+          <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-start gap-3">
             <Info className="w-5 h-5 text-brand-blue mt-0.5" />
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               To maintain the same lifestyle in {effectiveYears} years, your target of {formatCurrency(effectiveTarget)} 
-              will need to be <span className="font-bold text-slate-900">{formatCurrency(adjustedTarget)}</span> due to {effectiveInflation}% inflation.
+              will need to be <span className="font-bold text-slate-900 dark:text-slate-100">{formatCurrency(adjustedTarget)}</span> due to {effectiveInflation}% inflation.
             </p>
           </div>
 
@@ -195,19 +195,19 @@ export const GoalCalculator: React.FC = () => {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 bg-slate-50 rounded-xl border border-slate-100"
+              className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700"
             >
-              <p className="text-xs text-slate-500 uppercase font-semibold mb-1">Total Invested</p>
-              <p className="text-lg font-bold text-slate-800">{formatCurrency(results.totalInvestment)}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold mb-1">Total Invested</p>
+              <p className="text-lg font-bold text-slate-800 dark:text-slate-100">{formatCurrency(results.totalInvestment)}</p>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-4 bg-slate-50 rounded-xl border border-slate-100"
+              className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700"
             >
-              <p className="text-xs text-slate-500 uppercase font-semibold mb-1">Est. Returns</p>
-              <p className="text-lg font-bold text-brand-purple">{formatCurrency(results.estimatedReturns)}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold mb-1">Est. Returns</p>
+              <p className="text-lg font-bold text-brand-purple dark:text-purple-400">{formatCurrency(results.estimatedReturns)}</p>
             </motion.div>
           </motion.div>
         </div>
