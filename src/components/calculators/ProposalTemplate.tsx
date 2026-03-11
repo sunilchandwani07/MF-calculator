@@ -17,6 +17,11 @@ interface ProposalTemplateProps {
     totalWithdrawn?: number;
     stressFinalBalance?: number;
     stressTotalWithdrawn?: number;
+    monthsSustained?: number;
+    monthsAbove90?: number;
+    stressMonthsSustained?: number;
+    stressMonthsAbove90?: number;
+    durationYears?: number;
   };
   inputs: {
     label: string;
@@ -77,6 +82,23 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
           can help build long-term wealth through the power of compounding.
         </p>
 
+        {/* Investor Details */}
+        <div className="pt-4">
+          <h3 className="font-bold mb-3 border-b border-slate-200 pb-2">Investor Details</h3>
+          <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+            <div className="flex justify-between border-b border-slate-50 py-1">
+              <span className="text-slate-600">Investor Age</span>
+              <span className="font-bold">{investorAge} Years</span>
+            </div>
+            {investorWhatsapp && (
+              <div className="flex justify-between border-b border-slate-50 py-1">
+                <span className="text-slate-600">WhatsApp Number</span>
+                <span className="font-bold">{investorWhatsapp}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Investment Summary Table */}
         <div className="py-4">
           <h3 className="font-bold mb-4 border-b border-slate-200 pb-2">Investment Summary</h3>
@@ -88,16 +110,6 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
                   <td className="py-3 text-right font-bold">{input.value}</td>
                 </tr>
               ))}
-              <tr className="border-b border-slate-100">
-                <td className="py-3 text-slate-600">Investor Age</td>
-                <td className="py-3 text-right font-bold">{investorAge} Years</td>
-              </tr>
-              {investorWhatsapp && (
-                <tr className="border-b border-slate-100">
-                  <td className="py-3 text-slate-600">WhatsApp Number</td>
-                  <td className="py-3 text-right font-bold">{investorWhatsapp}</td>
-                </tr>
-              )}
               <tr className="border-b border-slate-100">
                 <td className="py-3 text-slate-600">Total Amount Invested</td>
                 <td className="py-3 text-right font-bold">{formatCurrency(results.totalInvestment)}</td>
@@ -120,6 +132,16 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
                 </td>
                 <td className="py-3 px-2 text-right text-brand-blue font-bold">
                   {formatCurrency(results.futureValue)}
+                  {results.durationYears && results.monthsAbove90 !== undefined && results.monthsAbove90 < results.durationYears * 12 && (
+                    <div className="text-[10px] text-amber-600 font-normal mt-1">
+                      90% Capital sustained upto {Math.floor(results.monthsAbove90 / 12)} years only
+                    </div>
+                  )}
+                  {results.durationYears && results.monthsSustained !== undefined && results.monthsSustained < results.durationYears * 12 && (
+                    <div className="text-[10px] text-red-600 font-normal mt-1">
+                      Withdrawal can be sustained upto {Math.floor(results.monthsSustained / 12)} years only
+                    </div>
+                  )}
                 </td>
               </tr>
               {results.stressFinalBalance !== undefined && (
@@ -129,6 +151,16 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
                   </td>
                   <td className="py-3 px-2 text-right text-red-600 font-bold">
                     {formatCurrency(results.stressFinalBalance)}
+                    {results.durationYears && results.stressMonthsAbove90 !== undefined && results.stressMonthsAbove90 < results.durationYears * 12 && (
+                      <div className="text-[10px] text-amber-600 font-normal mt-1">
+                        90% Capital sustained upto {Math.floor(results.stressMonthsAbove90 / 12)} years only
+                      </div>
+                    )}
+                    {results.durationYears && results.stressMonthsSustained !== undefined && results.stressMonthsSustained < results.durationYears * 12 && (
+                      <div className="text-[10px] text-red-600 font-normal mt-1">
+                        Withdrawal can be sustained upto {Math.floor(results.stressMonthsSustained / 12)} years only
+                      </div>
+                    )}
                   </td>
                 </tr>
               )}

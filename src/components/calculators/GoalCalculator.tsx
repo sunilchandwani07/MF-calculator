@@ -269,9 +269,11 @@ export const GoalCalculator: React.FC = () => {
         results={results}
         inputs={[
           { label: 'Target Goal (Today\'s Value)', value: formatCurrency(effectiveTarget) },
+          { label: 'Inflation Rate', value: `${effectiveInflation}%` },
           { label: 'Inflation Adjusted Goal', value: formatCurrency(adjustedTarget) },
           { label: 'Investment Duration', value: `${effectiveYears} Years` },
           { label: 'Expected Annual Return', value: `${effectiveRate}%` },
+          { label: 'Required Monthly SIP', value: formatCurrency(results.monthlyInvestment) },
         ]}
       />
     </div>

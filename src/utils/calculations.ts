@@ -152,11 +152,13 @@ export const calculateGoal = (targetAmount: number, rate: number, years: number)
 
 export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false) => {
   let balance = lumpsum;
-  const normalMonthlyRate = rate / 100 / 12;
-  const stressMonthlyRate = rate / 100 / 12; // Bull phase uses normal expected return
   const months = years * 12;
   let totalWithdrawn = 0;
   let currentMonthlyWithdrawal = monthlyWithdrawal;
+  const annualRate = rate / 100;
+  let monthsSustained = 0;
+  let monthsAbove90 = 0;
+  const target90 = lumpsum * 0.9;
 
   for (let m = 1; m <= months; m++) {
     // Withdraw at the beginning of the month
@@ -164,27 +166,40 @@ export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: n
     balance -= withdrawal;
     totalWithdrawn += withdrawal;
 
+    if (balance > 0) monthsSustained = m;
+    if (balance >= target90) monthsAbove90 = m;
+
     // Add interest for the month
-    let currentMonthlyRate = isStress ? stressMonthlyRate : normalMonthlyRate;
-    
-    // SPAN correction in first 3 months: 65% correction and 35% growth spread over 3 months
-    // Interpretation: Month 1 & 2: -21.66% each, Month 3: +11.66%
-    if (isStress && m <= 3) {
-      if (m <= 2) {
-        // -21.66% correction per month for first 2 months (total ~43.3% drop)
-        balance = balance * (1 - 0.2166);
+    let monthlyRate;
+    if (isStress) {
+      const monthInYear = ((m - 1) % 12) + 1;
+      const year = Math.ceil(m / 12);
+      const isCorrectionYear = (year - 1) % 4 === 0;
+
+      if (isCorrectionYear) {
+        const totalDrop = year === 1 ? 0.08 : 0.10;
+        if (monthInYear <= 3) {
+          // Sharp fall (70% of total drop in 1st quarter)
+          monthlyRate = Math.pow(1 - totalDrop * 0.7, 1 / 3) - 1;
+        } else {
+          // Gradual fall (30% of total drop in rest of year)
+          monthlyRate = Math.pow(1 - totalDrop * 0.3, 1 / 9) - 1;
+        }
       } else {
-        // +11.66% growth in 3rd month
-        balance = balance * (1 + 0.1166);
+        // Bull market / Recovery
+        if (monthInYear <= 6) {
+          // Gradual growth (30% of total growth in 1st half)
+          monthlyRate = Math.pow(1 + annualRate * 0.3, 1 / 6) - 1;
+        } else {
+          // Sharp growth (70% of total growth in 2nd half)
+          monthlyRate = Math.pow(1 + annualRate * 0.7, 1 / 6) - 1;
+        }
       }
     } else {
-      balance = balance * (1 + currentMonthlyRate);
+      monthlyRate = annualRate / 12;
     }
-
-    // Stress correction: 10% every 4 years (at the end of month 48, 96, etc.)
-    if (isStress && m > 3 && m % 48 === 0) {
-      balance = balance * 0.90;
-    }
+    
+    balance = balance * (1 + monthlyRate);
 
     // Increase withdrawal amount annually
     if (m % 12 === 0 && inflation > 0) {
@@ -201,12 +216,13 @@ export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: n
     finalBalance: Math.round(balance),
     totalWithdrawn: Math.round(totalWithdrawn),
     estimatedReturns: Math.round(Math.max(0, balance + totalWithdrawn - lumpsum)),
+    monthsSustained,
+    monthsAbove90
   };
 };
 
 export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false) => {
-  const normalMonthlyRate = rate / 100 / 12;
-  const stressMonthlyRate = rate / 100 / 12;
+  const annualRate = rate / 100;
   const months = years * 12;
 
   const findInitialWithdrawal = (targetFinalBalance: number) => {
@@ -222,20 +238,31 @@ export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, in
       for (let m = 1; m <= months; m++) {
         balance -= currentWithdrawal;
         
-        if (isStress && m <= 3) {
-          if (m <= 2) {
-            balance = balance * (1 - 0.2166);
+        let monthlyRate;
+        if (isStress) {
+          const monthInYear = ((m - 1) % 12) + 1;
+          const year = Math.ceil(m / 12);
+          const isCorrectionYear = (year - 1) % 4 === 0;
+
+          if (isCorrectionYear) {
+            const totalDrop = year === 1 ? 0.08 : 0.10;
+            if (monthInYear <= 3) {
+              monthlyRate = Math.pow(1 - totalDrop * 0.7, 1 / 3) - 1;
+            } else {
+              monthlyRate = Math.pow(1 - totalDrop * 0.3, 1 / 9) - 1;
+            }
           } else {
-            balance = balance * (1 + 0.1166);
+            if (monthInYear <= 6) {
+              monthlyRate = Math.pow(1 + annualRate * 0.3, 1 / 6) - 1;
+            } else {
+              monthlyRate = Math.pow(1 + annualRate * 0.7, 1 / 6) - 1;
+            }
           }
         } else {
-          const currentMonthlyRate = isStress ? stressMonthlyRate : normalMonthlyRate;
-          balance *= (1 + currentMonthlyRate);
+          monthlyRate = annualRate / 12;
         }
         
-        if (isStress && m > 3 && m % 48 === 0) {
-          balance *= 0.90;
-        }
+        balance *= (1 + monthlyRate);
 
         if (m % 12 === 0 && inflation > 0) {
           currentWithdrawal *= (1 + inflation / 100);

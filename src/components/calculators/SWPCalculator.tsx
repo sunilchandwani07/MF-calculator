@@ -211,6 +211,16 @@ export const SWPCalculator: React.FC = () => {
                   <p className="text-xs text-slate-500 dark:text-slate-400">Final Balance</p>
                   <p className="text-lg font-bold text-blue-700 dark:text-blue-400">{formatCurrency(results.finalBalance)}</p>
                   <p className="text-xs text-slate-600 dark:text-slate-400">Total Withdrawn: {formatCurrency(results.totalWithdrawn)}</p>
+                  {results.monthsAbove90 < effectiveYears * 12 && (
+                    <p className="text-[10px] text-amber-600 font-bold mt-1 bg-amber-50 p-1 rounded">
+                      90% Capital sustained upto {Math.floor(results.monthsAbove90 / 12)} years only
+                    </p>
+                  )}
+                  {results.monthsSustained < effectiveYears * 12 && (
+                    <p className="text-[10px] text-red-600 font-bold mt-1 bg-red-50 p-1 rounded">
+                      Withdrawal can be sustained upto {Math.floor(results.monthsSustained / 12)} years only
+                    </p>
+                  )}
                 </div>
               </motion.div>
               <motion.div 
@@ -224,6 +234,16 @@ export const SWPCalculator: React.FC = () => {
                   <p className="text-xs text-slate-500 dark:text-slate-400">Final Balance</p>
                   <p className="text-lg font-bold text-red-700 dark:text-red-400">{formatCurrency(stressResults.finalBalance)}</p>
                   <p className="text-xs text-slate-600 dark:text-slate-400">Total Withdrawn: {formatCurrency(stressResults.totalWithdrawn)}</p>
+                  {stressResults.monthsAbove90 < effectiveYears * 12 && (
+                    <p className="text-[10px] text-amber-600 font-bold mt-1 bg-amber-50 p-1 rounded">
+                      90% Capital sustained upto {Math.floor(stressResults.monthsAbove90 / 12)} years only
+                    </p>
+                  )}
+                  {stressResults.monthsSustained < effectiveYears * 12 && (
+                    <p className="text-[10px] text-red-600 font-bold mt-1 bg-red-50 p-1 rounded">
+                      Withdrawal can be sustained upto {Math.floor(stressResults.monthsSustained / 12)} years only
+                    </p>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -317,16 +337,20 @@ export const SWPCalculator: React.FC = () => {
           estimatedReturns: results.estimatedReturns,
           totalWithdrawn: results.totalWithdrawn,
           stressFinalBalance: stressResults.finalBalance,
-          stressTotalWithdrawn: stressResults.totalWithdrawn
+          stressTotalWithdrawn: stressResults.totalWithdrawn,
+          monthsSustained: results.monthsSustained,
+          monthsAbove90: results.monthsAbove90,
+          stressMonthsSustained: stressResults.monthsSustained,
+          stressMonthsAbove90: stressResults.monthsAbove90,
+          durationYears: effectiveYears
         }}
         inputs={[
           { label: 'Lumpsum Investment', value: formatCurrency(effectiveLumpsum) },
           { label: 'Initial Monthly Withdrawal', value: formatCurrency(effectiveWithdrawal) },
+          { label: 'Annual Inflation', value: `${effectiveInflation}%` },
           { label: 'Investment Duration', value: `${effectiveYears} Years` },
           { label: 'Expected Return (Normal)', value: `${effectiveRate}%` },
-          { label: 'Expected Return (Stress)', value: `${effectiveRate}% (Bull) / -10% Correction` },
-          { label: 'Initial Stress (SPAN)', value: '65% Correction / 35% Growth (First 3 Months)' },
-          { label: 'Annual Inflation', value: `${effectiveInflation}%` },
+          { label: 'Expected Return (Stress)', value: `8% Drop (Yr 1), 10% Drop (Every 4 Yrs), U-Shape Recovery` },
           { label: 'Max Withdrawal (Normal - Safety)', value: formatCurrency(maxWithdrawal.maxWithdrawalCase1) },
           { label: 'Max Withdrawal (Stress - Safety)', value: formatCurrency(stressMaxWithdrawal.maxWithdrawalCase1) },
         ]}

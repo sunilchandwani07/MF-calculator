@@ -6,15 +6,16 @@ export const generatePDF = async (elementId: string, fileName: string) => {
   const element = document.getElementById(elementId);
   if (!element) return;
 
-  // Set margins (0.5 inch = 12.7 mm)
-  const marginMm = 12.7;
+  // Set margins (15mm)
+  const marginMm = 15;
   const pdf = new jsPDF('p', 'mm', 'a4');
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = pdf.internal.pageSize.getHeight();
   
   // Content area dimensions (leave space for footer)
-  const footerHeight = 15;
+  const footerHeight = 20;
   const contentWidth = pdfWidth - (2 * marginMm);
+  const overlap = 4; // 4mm overlap to prevent text cutting
   const contentHeight = pdfHeight - (2 * marginMm) - footerHeight;
 
   const canvas = await html2canvas(element, {
@@ -56,20 +57,19 @@ export const generatePDF = async (elementId: string, fileName: string) => {
   const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
   
   let heightLeft = imgHeight;
-  let position = 0;
   let pageNumber = 1;
 
   // First page
   pdf.addImage(imgData, 'PNG', marginMm, marginMm, imgWidth, imgHeight);
-  heightLeft -= contentHeight;
+  heightLeft -= (contentHeight - overlap);
 
   while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
     pdf.addPage();
     pageNumber++;
-    // Add the image slice
+    // Calculate position with overlap
+    const position = -(contentHeight - overlap) * (pageNumber - 1);
     pdf.addImage(imgData, 'PNG', marginMm, position + marginMm, imgWidth, imgHeight);
-    heightLeft -= contentHeight;
+    heightLeft -= (contentHeight - overlap);
   }
 
   // Second pass: Add footer and page numbers to all pages
@@ -79,24 +79,24 @@ export const generatePDF = async (elementId: string, fileName: string) => {
     
     // Mask footer area to prevent content overlap
     pdf.setFillColor(255, 255, 255);
-    const maskY = pdfHeight - footerHeight - marginMm;
+    const maskY = pdfHeight - footerHeight - marginMm + 2; // Slight adjustment
     pdf.rect(0, maskY, pdfWidth, footerHeight + marginMm, 'F');
 
     // Mask top margin area to prevent bleed from previous page slices
     pdf.rect(0, 0, pdfWidth, marginMm, 'F');
 
     // Footer line
-    pdf.setDrawColor(200);
+    pdf.setDrawColor(230);
     pdf.line(marginMm, maskY, pdfWidth - marginMm, maskY);
 
     // Contact info in footer
     pdf.setFontSize(8);
-    pdf.setTextColor(100);
+    pdf.setTextColor(120);
     const contactText = `${APP_CONFIG.distributorName} | ${APP_CONFIG.contactNumbers.join(' | ')} | ${APP_CONFIG.email}`;
-    pdf.text(contactText, marginMm, pdfHeight - 10);
+    pdf.text(contactText, marginMm, pdfHeight - 12);
 
     // Page number
-    pdf.text(`Page ${i} of ${totalPages}`, pdfWidth - marginMm - 20, pdfHeight - 10);
+    pdf.text(`Page ${i} of ${totalPages}`, pdfWidth - marginMm - 20, pdfHeight - 12);
   }
 
   pdf.save(`${fileName}.pdf`);
