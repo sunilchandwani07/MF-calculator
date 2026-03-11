@@ -43,9 +43,9 @@ export const SWPCalculator: React.FC = () => {
       generatePDF('swp-proposal-template', `SWP_Proposal_${data.name}`);
     }, 100);
 
-    // Send WhatsApp message if number is provided
-    if (data.whatsapp) {
-      const message = encodeURIComponent(`Hi from Invest & Insure! I've generated your SWP (Retirement) proposal. Please find it attached.`);
+    // Send WhatsApp message if number is provided (more than just the default '91' prefix)
+    if (data.whatsapp && data.whatsapp.length > 2) {
+      const message = encodeURIComponent(`Hi from Invest & Insure! We guide you to build Wealth. Remember " Mutual Funds Sahi hai & Advisor Jaroori Hai".`);
       const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
       window.open(whatsappUrl, '_blank');
     }

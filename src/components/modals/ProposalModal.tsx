@@ -11,7 +11,7 @@ interface ProposalModalProps {
 export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [name, setName] = useState('Investor');
   const [age, setAge] = useState(35);
-  const [whatsapp, setWhatsapp] = useState('');
+  const [whatsapp, setWhatsapp] = useState('91');
 
   const quickAges = [25, 30, 35, 40, 45, 50, 60];
 

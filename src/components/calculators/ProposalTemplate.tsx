@@ -146,6 +146,13 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
           tomorrow.
         </p>
 
+        {/* Punchline */}
+        <div className="py-8 text-center">
+          <p className="text-xl font-bold text-brand-blue">
+            Mutual Funds Sahi hai & Advisor Jaroori Hai
+          </p>
+        </div>
+
         {/* Sign-off */}
         <div className="pt-8">
           <p>With Warm Regards,</p>
