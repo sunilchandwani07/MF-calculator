@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, User, Calendar } from 'lucide-react';
+import { X, User, Calendar, MessageCircle } from 'lucide-react';
 
 interface ProposalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: { name: string; age: number }) => void;
+  onConfirm: (data: { name: string; age: number; whatsapp?: string }) => void;
 }
 
 export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [name, setName] = useState('Investor');
   const [age, setAge] = useState(35);
+  const [whatsapp, setWhatsapp] = useState('');
 
   const quickAges = [25, 30, 35, 40, 45, 50, 60];
 
@@ -35,7 +36,7 @@ export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, o
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-5">
               <div>
                 <label className="input-label flex items-center gap-2 mb-2">
                   <User className="w-4 h-4 text-brand-blue" />
@@ -47,7 +48,7 @@ export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, o
                   onChange={(e) => setName(e.target.value)}
                   onFocus={(e) => e.target.select()}
                   placeholder="Enter investor name"
-                  className="input-field py-3 text-lg"
+                  className="input-field py-2.5 text-base"
                 />
               </div>
 
@@ -63,7 +64,7 @@ export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, o
                     onChange={(e) => setAge(Number(e.target.value))}
                     onFocus={(e) => e.target.select()}
                     placeholder="Enter age"
-                    className="input-field py-3 text-lg"
+                    className="input-field py-2.5 text-base"
                   />
                   <div className="flex flex-wrap gap-2">
                     {quickAges.map((a) => (
@@ -83,14 +84,33 @@ export const ProposalModal: React.FC<ProposalModalProps> = ({ isOpen, onClose, o
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div>
+                <label className="input-label flex items-center gap-2 mb-2">
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  WhatsApp Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value)}
+                  placeholder="e.g. 919876543210"
+                  className="input-field py-2.5 text-base"
+                />
+                <p className="text-[10px] text-slate-400 mt-1 italic">Include country code without + or spaces</p>
+              </div>
+
+              <div className="pt-2">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => onConfirm({ name: name || 'Investor', age: age || 35 })}
-                  className="w-full btn-primary py-4 text-lg shadow-xl"
+                  onClick={() => onConfirm({ 
+                    name: name || 'Investor', 
+                    age: age || 35,
+                    whatsapp: whatsapp.trim()
+                  })}
+                  className="w-full btn-primary py-3.5 text-lg shadow-xl"
                 >
-                  Generate PDF Proposal
+                  Generate & Send Proposal
                 </motion.button>
               </div>
             </div>

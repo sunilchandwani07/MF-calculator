@@ -13,7 +13,7 @@ export const LumpsumCalculator: React.FC = () => {
   const [years, setYears] = useState(10);
   const [results, setResults] = useState(calculateLumpsum(100000, 12, 10));
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35 });
+  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35, whatsapp: '' });
 
   // Effective values for calculation
   const effectiveInvestment = Math.max(5000, Math.min(10000000, investment));
@@ -36,12 +36,21 @@ export const LumpsumCalculator: React.FC = () => {
     setYears(val);
   };
 
-  const handleDownload = (data: { name: string; age: number }) => {
-    setInvestorData(data);
+  const handleDownload = (data: { name: string; age: number; whatsapp?: string }) => {
+    setInvestorData({ name: data.name, age: data.age, whatsapp: data.whatsapp || '' });
     setIsModalOpen(false);
+    
+    // Generate PDF
     setTimeout(() => {
       generatePDF('lumpsum-proposal-template', `Lumpsum_Proposal_${data.name}`);
     }, 100);
+
+    // Send WhatsApp message if number is provided
+    if (data.whatsapp) {
+      const message = encodeURIComponent(`Hi from Invest & Insure! I've generated your Lumpsum Investment proposal. Please find it attached.`);
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   const chartData = [
@@ -207,6 +216,7 @@ export const LumpsumCalculator: React.FC = () => {
         calculatorName="Lumpsum Investment"
         investorName={investorData.name}
         investorAge={investorData.age}
+        investorWhatsapp={investorData.whatsapp}
         results={results}
         inputs={[
           { label: 'One-time Investment', value: formatCurrency(effectiveInvestment) },

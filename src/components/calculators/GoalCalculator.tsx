@@ -13,7 +13,7 @@ export const GoalCalculator: React.FC = () => {
   const [years, setYears] = useState(10);
   const [inflation, setInflation] = useState(6);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35 });
+  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35, whatsapp: '' });
   
   // Effective values for calculation
   const effectiveTarget = Math.max(100000, Math.min(100000000, targetAmount));
@@ -46,12 +46,21 @@ export const GoalCalculator: React.FC = () => {
     setInflation(val);
   };
 
-  const handleDownload = (data: { name: string; age: number }) => {
-    setInvestorData(data);
+  const handleDownload = (data: { name: string; age: number; whatsapp?: string }) => {
+    setInvestorData({ name: data.name, age: data.age, whatsapp: data.whatsapp || '' });
     setIsModalOpen(false);
+    
+    // Generate PDF
     setTimeout(() => {
       generatePDF('goal-proposal-template', `Goal_Proposal_${data.name}`);
     }, 100);
+
+    // Send WhatsApp message if number is provided
+    if (data.whatsapp) {
+      const message = encodeURIComponent(`Hi from Invest & Insure! I've generated your Goal Based Planning proposal. Please find it attached.`);
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   const chartData = [
@@ -256,6 +265,7 @@ export const GoalCalculator: React.FC = () => {
         calculatorName="Goal Planning"
         investorName={investorData.name}
         investorAge={investorData.age}
+        investorWhatsapp={investorData.whatsapp}
         results={results}
         inputs={[
           { label: 'Target Goal (Today\'s Value)', value: formatCurrency(effectiveTarget) },

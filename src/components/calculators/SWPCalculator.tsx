@@ -18,7 +18,7 @@ export const SWPCalculator: React.FC = () => {
   const [maxWithdrawal, setMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6));
   const [stressMaxWithdrawal, setStressMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6, true));
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35 });
+  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35, whatsapp: '' });
 
   // Effective values for calculation
   const effectiveLumpsum = Math.max(10000, Math.min(100000000, lumpsum));
@@ -34,12 +34,21 @@ export const SWPCalculator: React.FC = () => {
     setStressMaxWithdrawal(calculateMaxSWP(effectiveLumpsum, effectiveRate, effectiveYears, effectiveInflation, true));
   }, [effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation]);
 
-  const handleDownload = (data: { name: string; age: number }) => {
-    setInvestorData(data);
+  const handleDownload = (data: { name: string; age: number; whatsapp?: string }) => {
+    setInvestorData({ name: data.name, age: data.age, whatsapp: data.whatsapp || '' });
     setIsModalOpen(false);
+    
+    // Generate PDF
     setTimeout(() => {
       generatePDF('swp-proposal-template', `SWP_Proposal_${data.name}`);
     }, 100);
+
+    // Send WhatsApp message if number is provided
+    if (data.whatsapp) {
+      const message = encodeURIComponent(`Hi from Invest & Insure! I've generated your SWP (Retirement) proposal. Please find it attached.`);
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   const chartData = [
@@ -301,6 +310,7 @@ export const SWPCalculator: React.FC = () => {
         calculatorName="Systematic Withdrawal Plan (Comparative)"
         investorName={investorData.name}
         investorAge={investorData.age}
+        investorWhatsapp={investorData.whatsapp}
         results={{
           futureValue: results.finalBalance,
           totalInvestment: effectiveLumpsum,

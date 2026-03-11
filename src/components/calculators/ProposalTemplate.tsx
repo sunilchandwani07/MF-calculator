@@ -8,6 +8,7 @@ interface ProposalTemplateProps {
   calculatorName: string;
   investorName: string;
   investorAge: number;
+  investorWhatsapp?: string;
   results: {
     totalInvestment: number;
     estimatedReturns: number;
@@ -28,6 +29,7 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
   calculatorName,
   investorName,
   investorAge,
+  investorWhatsapp,
   results,
   inputs,
 }) => {
@@ -86,6 +88,16 @@ export const ProposalTemplate: React.FC<ProposalTemplateProps> = ({
                   <td className="py-3 text-right font-bold">{input.value}</td>
                 </tr>
               ))}
+              <tr className="border-b border-slate-100">
+                <td className="py-3 text-slate-600">Investor Age</td>
+                <td className="py-3 text-right font-bold">{investorAge} Years</td>
+              </tr>
+              {investorWhatsapp && (
+                <tr className="border-b border-slate-100">
+                  <td className="py-3 text-slate-600">WhatsApp Number</td>
+                  <td className="py-3 text-right font-bold">{investorWhatsapp}</td>
+                </tr>
+              )}
               <tr className="border-b border-slate-100">
                 <td className="py-3 text-slate-600">Total Amount Invested</td>
                 <td className="py-3 text-right font-bold">{formatCurrency(results.totalInvestment)}</td>

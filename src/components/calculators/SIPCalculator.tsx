@@ -29,7 +29,7 @@ export const SIPCalculator: React.FC = () => {
   const [homeLoanResults, setHomeLoanResults] = useState(calculateHomeLoanSetOff(5000000, 8.5, 20, 12));
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35 });
+  const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35, whatsapp: '' });
 
   // Effective values for calculation
   const effectiveMonthly = Math.max(500, Math.min(1000000, monthlyInvestment));
@@ -56,12 +56,21 @@ export const SIPCalculator: React.FC = () => {
     setHomeLoanResults(calculateHomeLoanSetOff(loanAmount, loanRate, loanTenure, effectiveRate, loanInterestType));
   }, [loanAmount, loanRate, loanTenure, effectiveRate, loanInterestType]);
 
-  const handleDownload = (data: { name: string; age: number }) => {
-    setInvestorData(data);
+  const handleDownload = (data: { name: string; age: number; whatsapp?: string }) => {
+    setInvestorData({ name: data.name, age: data.age, whatsapp: data.whatsapp || '' });
     setIsModalOpen(false);
+    
+    // Generate PDF
     setTimeout(() => {
       generatePDF('sip-proposal-template', `SIP_Proposal_${data.name}`);
     }, 100);
+
+    // Send WhatsApp message if number is provided
+    if (data.whatsapp) {
+      const message = encodeURIComponent(`Hi from Invest & Insure! I've generated your ${activeTab === 'homeloan' ? 'Home Loan Set-off' : 'SIP'} proposal. Please find it attached.`);
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   const chartData = [
@@ -505,6 +514,7 @@ export const SIPCalculator: React.FC = () => {
         calculatorName={activeTab === 'homeloan' ? 'Home Loan Set-off Strategy' : activeTab === 'stepup' ? 'Step-up SIP Plan' : 'Systematic Investment Plan'}
         investorName={investorData.name}
         investorAge={investorData.age}
+        investorWhatsapp={investorData.whatsapp}
         results={activeTab === 'homeloan' ? {
           futureValue: (homeLoanResults.sipRequired * loanTenure * 12) + homeLoanResults.totalInterest,
           totalInvestment: homeLoanResults.sipRequired * loanTenure * 12,
