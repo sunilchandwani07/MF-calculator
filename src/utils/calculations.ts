@@ -150,7 +150,7 @@ export const calculateGoal = (targetAmount: number, rate: number, years: number)
   };
 };
 
-export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false) => {
+export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false, defermentMonths: number = 0) => {
   let balance = lumpsum;
   const months = years * 12;
   let totalWithdrawn = 0;
@@ -161,10 +161,12 @@ export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: n
   const target90 = lumpsum * 0.9;
 
   for (let m = 1; m <= months; m++) {
-    // Withdraw at the beginning of the month
-    const withdrawal = Math.min(balance, currentMonthlyWithdrawal);
-    balance -= withdrawal;
-    totalWithdrawn += withdrawal;
+    // Withdraw at the beginning of the month, only after deferment
+    if (m > defermentMonths) {
+      const withdrawal = Math.min(balance, currentMonthlyWithdrawal);
+      balance -= withdrawal;
+      totalWithdrawn += withdrawal;
+    }
 
     if (balance > 0) monthsSustained = m;
     if (balance >= target90) monthsAbove90 = m;
@@ -201,8 +203,8 @@ export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: n
     
     balance = balance * (1 + monthlyRate);
 
-    // Increase withdrawal amount annually
-    if (m % 12 === 0 && inflation > 0) {
+    // Increase withdrawal amount annually (only after deferment starts)
+    if (m > defermentMonths && (m - defermentMonths) % 12 === 0 && inflation > 0) {
       currentMonthlyWithdrawal = currentMonthlyWithdrawal * (1 + (inflation / 100));
     }
 
@@ -221,13 +223,13 @@ export const calculateSWP = (lumpsum: number, monthlyWithdrawal: number, rate: n
   };
 };
 
-export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false) => {
+export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, inflation: number = 0, isStress: boolean = false, defermentMonths: number = 0) => {
   const annualRate = rate / 100;
   const months = years * 12;
 
   const findInitialWithdrawal = (targetFinalBalance: number) => {
     let low = 0;
-    let high = lumpsum; 
+    let high = lumpsum * 2; // Higher upper bound for deferred SWP
     let result = 0;
 
     for (let i = 0; i < 25; i++) {
@@ -236,7 +238,9 @@ export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, in
       let currentWithdrawal = mid;
       
       for (let m = 1; m <= months; m++) {
-        balance -= currentWithdrawal;
+        if (m > defermentMonths) {
+          balance -= currentWithdrawal;
+        }
         
         let monthlyRate;
         if (isStress) {
@@ -264,7 +268,7 @@ export const calculateMaxSWP = (lumpsum: number, rate: number, years: number, in
         
         balance *= (1 + monthlyRate);
 
-        if (m % 12 === 0 && inflation > 0) {
+        if (m > defermentMonths && (m - defermentMonths) % 12 === 0 && inflation > 0) {
           currentWithdrawal *= (1 + inflation / 100);
         }
         

@@ -13,10 +13,12 @@ export const SWPCalculator: React.FC = () => {
   const [rate, setRate] = useState(12);
   const [years, setYears] = useState(10);
   const [inflation, setInflation] = useState(6);
-  const [results, setResults] = useState(calculateSWP(1000000, 10000, 12, 10, 6));
-  const [stressResults, setStressResults] = useState(calculateSWP(1000000, 10000, 12, 10, 6, true));
-  const [maxWithdrawal, setMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6));
-  const [stressMaxWithdrawal, setStressMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6, true));
+  const [defermentYears, setDefermentYears] = useState(0);
+  const [defermentMonths, setDefermentMonths] = useState(0);
+  const [results, setResults] = useState(calculateSWP(1000000, 10000, 12, 10, 6, false, 0));
+  const [stressResults, setStressResults] = useState(calculateSWP(1000000, 10000, 12, 10, 6, true, 0));
+  const [maxWithdrawal, setMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6, false, 0));
+  const [stressMaxWithdrawal, setStressMaxWithdrawal] = useState(calculateMaxSWP(1000000, 12, 10, 6, true, 0));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [investorData, setInvestorData] = useState({ name: 'Investor', age: 35, whatsapp: '' });
 
@@ -26,13 +28,14 @@ export const SWPCalculator: React.FC = () => {
   const effectiveRate = Math.max(1, Math.min(30, rate));
   const effectiveYears = Math.max(1, Math.min(50, years));
   const effectiveInflation = Math.max(0, Math.min(20, inflation));
+  const effectiveDefermentMonths = (defermentYears * 12) + defermentMonths;
 
   useEffect(() => {
-    setResults(calculateSWP(effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation));
-    setStressResults(calculateSWP(effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation, true));
-    setMaxWithdrawal(calculateMaxSWP(effectiveLumpsum, effectiveRate, effectiveYears, effectiveInflation));
-    setStressMaxWithdrawal(calculateMaxSWP(effectiveLumpsum, effectiveRate, effectiveYears, effectiveInflation, true));
-  }, [effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation]);
+    setResults(calculateSWP(effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation, false, effectiveDefermentMonths));
+    setStressResults(calculateSWP(effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation, true, effectiveDefermentMonths));
+    setMaxWithdrawal(calculateMaxSWP(effectiveLumpsum, effectiveRate, effectiveYears, effectiveInflation, false, effectiveDefermentMonths));
+    setStressMaxWithdrawal(calculateMaxSWP(effectiveLumpsum, effectiveRate, effectiveYears, effectiveInflation, true, effectiveDefermentMonths));
+  }, [effectiveLumpsum, effectiveWithdrawal, effectiveRate, effectiveYears, effectiveInflation, effectiveDefermentMonths]);
 
   const handleDownload = (data: { name: string; age: number; whatsapp?: string }) => {
     setInvestorData({ name: data.name, age: data.age, whatsapp: data.whatsapp || '' });
@@ -195,6 +198,58 @@ export const SWPCalculator: React.FC = () => {
             />
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="input-label">Deferment (Years)</label>
+                <div className="flex items-center gap-1">
+                  <input 
+                    type="number"
+                    min="0"
+                    max={years - 1}
+                    value={defermentYears}
+                    onChange={(e) => setDefermentYears(Number(e.target.value))}
+                    className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
+                  />
+                  <span className="text-brand-blue font-bold">Yr</span>
+                </div>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max={years - 1}
+                value={defermentYears}
+                onChange={(e) => setDefermentYears(Number(e.target.value))}
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="input-label">Deferment (Months)</label>
+                <div className="flex items-center gap-1">
+                  <input 
+                    type="number"
+                    min="0"
+                    max="11"
+                    value={defermentMonths}
+                    onChange={(e) => setDefermentMonths(Number(e.target.value))}
+                    className="w-12 text-right font-bold text-brand-blue bg-transparent border-b border-slate-200 dark:border-slate-700 focus:border-brand-blue outline-none"
+                  />
+                  <span className="text-brand-blue font-bold">Mo</span>
+                </div>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="11"
+                value={defermentMonths}
+                onChange={(e) => setDefermentMonths(Number(e.target.value))}
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              />
+            </div>
+          </div>
+
           <motion.div layout className="space-y-4 pt-4">
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-brand-blue" />
@@ -348,6 +403,7 @@ export const SWPCalculator: React.FC = () => {
           { label: 'Lumpsum Investment', value: formatCurrency(effectiveLumpsum) },
           { label: 'Initial Monthly Withdrawal', value: formatCurrency(effectiveWithdrawal) },
           { label: 'Annual Inflation', value: `${effectiveInflation}%` },
+          { label: 'Withdrawal Deferment', value: `${defermentYears} Years ${defermentMonths} Months` },
           { label: 'Investment Duration', value: `${effectiveYears} Years` },
           { label: 'Expected Return (Normal)', value: `${effectiveRate}%` },
           { label: 'Expected Return (Stress)', value: `8% Drop (Yr 1), 10% Drop (Every 4 Yrs), U-Shape Recovery` },
