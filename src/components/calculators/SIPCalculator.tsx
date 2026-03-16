@@ -6,6 +6,7 @@ import { generatePDF } from '../../utils/pdfGenerator';
 import { motion, AnimatePresence } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
+import { Slider } from '../ui/Slider';
 
 export const SIPCalculator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'standard' | 'stepup' | 'homeloan'>('standard');
@@ -157,11 +158,10 @@ export const SIPCalculator: React.FC = () => {
                         />
                       </div>
                     </div>
-                    <input 
-                      type="range" min="100000" max="20000000" step="100000"
+                    <Slider 
+                      min={100000} max={20000000} step={100000}
                       value={loanAmount}
-                      onChange={(e) => setLoanAmount(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setLoanAmount}
                     />
                   </div>
                   <div>
@@ -176,11 +176,10 @@ export const SIPCalculator: React.FC = () => {
                         <span className="text-brand-blue font-bold">%</span>
                       </div>
                     </div>
-                    <input 
-                      type="range" min="5" max="15" step="0.1"
+                    <Slider 
+                      min={5} max={15} step={0.1}
                       value={loanRate}
-                      onChange={(e) => setLoanRate(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setLoanRate}
                     />
                   </div>
                   <div>
@@ -195,11 +194,10 @@ export const SIPCalculator: React.FC = () => {
                         <span className="text-brand-blue font-bold">Yr</span>
                       </div>
                     </div>
-                    <input 
-                      type="range" min="1" max="30"
+                    <Slider 
+                      min={1} max={30}
                       value={loanTenure}
-                      onChange={(e) => setLoanTenure(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setLoanTenure}
                     />
                   </div>
                 </div>
@@ -220,14 +218,12 @@ export const SIPCalculator: React.FC = () => {
                         />
                       </div>
                     </div>
-                    <input 
-                      type="range" 
-                      min="500" 
-                      max="100000" 
-                      step="500"
+                    <Slider 
+                      min={500} 
+                      max={100000} 
+                      step={500}
                       value={monthlyInvestment}
-                      onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setMonthlyInvestment}
                     />
                   </div>
 
@@ -280,14 +276,12 @@ export const SIPCalculator: React.FC = () => {
                           {stepUpType === 'percentage' && <span className="text-brand-blue font-bold">%</span>}
                         </div>
                       </div>
-                      <input 
-                        type="range" 
-                        min="0" 
+                      <Slider 
+                        min={0} 
                         max={stepUpType === 'percentage' ? 50 : 50000} 
                         step={stepUpType === 'percentage' ? 1 : 500}
                         value={stepUp}
-                        onChange={(e) => setStepUp(Number(e.target.value))}
-                        className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                        onChange={setStepUp}
                       />
                     </motion.div>
                   )}
@@ -308,14 +302,12 @@ export const SIPCalculator: React.FC = () => {
                         <span className="text-brand-blue font-bold">%</span>
                       </div>
                     </div>
-                    <input 
-                      type="range" 
-                      min="1" 
-                      max="30" 
-                      step="0.5"
+                    <Slider 
+                      min={1} 
+                      max={30} 
+                      step={0.5}
                       value={rate}
-                      onChange={(e) => setRate(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setRate}
                     />
                   </div>
 
@@ -334,13 +326,11 @@ export const SIPCalculator: React.FC = () => {
                         <span className="text-brand-blue font-bold">Yr</span>
                       </div>
                     </div>
-                    <input 
-                      type="range" 
-                      min="1" 
-                      max="50" 
+                    <Slider 
+                      min={1} 
+                      max={50} 
                       value={years}
-                      onChange={(e) => setYears(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                      onChange={setYears}
                     />
                   </div>
                 </div>

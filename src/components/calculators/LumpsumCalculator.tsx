@@ -6,6 +6,7 @@ import { generatePDF } from '../../utils/pdfGenerator';
 import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
+import { Slider } from '../ui/Slider';
 
 export const LumpsumCalculator: React.FC = () => {
   const [investment, setInvestment] = useState(100000);
@@ -79,14 +80,12 @@ export const LumpsumCalculator: React.FC = () => {
                 />
               </div>
             </div>
-            <input 
-              type="range" 
-              min="5000" 
-              max="10000000" 
-              step="5000"
+            <Slider 
+              min={5000} 
+              max={10000000} 
+              step={5000}
               value={investment}
-              onChange={(e) => handleInvestmentChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={handleInvestmentChange}
             />
           </div>
 
@@ -106,14 +105,12 @@ export const LumpsumCalculator: React.FC = () => {
                 <span className="text-brand-blue font-bold">%</span>
               </div>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="30" 
-              step="0.5"
+            <Slider 
+              min={1} 
+              max={30} 
+              step={0.5}
               value={rate}
-              onChange={(e) => handleRateChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={handleRateChange}
             />
           </div>
 
@@ -132,13 +129,11 @@ export const LumpsumCalculator: React.FC = () => {
                 <span className="text-brand-blue font-bold">Yr</span>
               </div>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="50" 
+            <Slider 
+              min={1} 
+              max={50} 
               value={years}
-              onChange={(e) => handleYearsChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={handleYearsChange}
             />
           </div>
 

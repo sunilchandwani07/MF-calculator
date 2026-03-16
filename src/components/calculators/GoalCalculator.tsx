@@ -6,6 +6,7 @@ import { generatePDF } from '../../utils/pdfGenerator';
 import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
+import { Slider } from '../ui/Slider';
 
 export const GoalCalculator: React.FC = () => {
   const [targetAmount, setTargetAmount] = useState(1000000);
@@ -89,14 +90,12 @@ export const GoalCalculator: React.FC = () => {
                 />
               </div>
             </div>
-            <input 
-              type="range" 
-              min="100000" 
-              max="100000000" 
-              step="100000"
+            <Slider 
+              min={100000} 
+              max={100000000} 
+              step={100000}
               value={targetAmount}
-              onChange={(e) => handleTargetChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={handleTargetChange}
             />
           </div>
 
@@ -117,14 +116,12 @@ export const GoalCalculator: React.FC = () => {
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="1" 
-                max="30" 
-                step="0.5"
+              <Slider 
+                min={1} 
+                max={30} 
+                step={0.5}
                 value={rate}
-                onChange={(e) => handleRateChange(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                onChange={handleRateChange}
               />
             </div>
             <div>
@@ -143,14 +140,12 @@ export const GoalCalculator: React.FC = () => {
                   <span className="text-brand-purple font-bold">%</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="0" 
-                max="15" 
-                step="0.5"
+              <Slider 
+                min={0} 
+                max={15} 
+                step={0.5}
                 value={inflation}
-                onChange={(e) => handleInflationChange(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-purple"
+                onChange={handleInflationChange}
               />
             </div>
           </div>
@@ -170,13 +165,11 @@ export const GoalCalculator: React.FC = () => {
                 <span className="text-brand-blue font-bold">Yr</span>
               </div>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="50" 
+            <Slider 
+              min={1} 
+              max={50} 
               value={years}
-              onChange={(e) => handleYearsChange(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={handleYearsChange}
             />
           </div>
 

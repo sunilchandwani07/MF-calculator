@@ -6,6 +6,7 @@ import { generatePDF } from '../../utils/pdfGenerator';
 import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
+import { Slider } from '../ui/Slider';
 
 export const SWPCalculator: React.FC = () => {
   const [lumpsum, setLumpsum] = useState(1000000);
@@ -80,14 +81,12 @@ export const SWPCalculator: React.FC = () => {
                 />
               </div>
             </div>
-            <input 
-              type="range" 
-              min="10000" 
-              max="10000000" 
-              step="10000"
+            <Slider 
+              min={10000} 
+              max={10000000} 
+              step={10000}
               value={lumpsum}
-              onChange={(e) => setLumpsum(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={setLumpsum}
             />
           </div>
 
@@ -106,14 +105,12 @@ export const SWPCalculator: React.FC = () => {
                 />
               </div>
             </div>
-            <input 
-              type="range" 
-              min="500" 
+            <Slider 
+              min={500} 
               max={Math.min(lumpsum / 12, 100000)} 
-              step="500"
+              step={500}
               value={withdrawal}
-              onChange={(e) => setWithdrawal(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={setWithdrawal}
             />
           </div>
 
@@ -134,14 +131,12 @@ export const SWPCalculator: React.FC = () => {
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="1" 
-                max="30" 
-                step="0.5"
+              <Slider 
+                min={1} 
+                max={30} 
+                step={0.5}
                 value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                onChange={setRate}
               />
             </div>
 
@@ -161,14 +156,12 @@ export const SWPCalculator: React.FC = () => {
                   <span className="text-brand-blue font-bold">%</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="0" 
-                max="20" 
-                step="0.5"
+              <Slider 
+                min={0} 
+                max={20} 
+                step={0.5}
                 value={inflation}
-                onChange={(e) => setInflation(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                onChange={setInflation}
               />
             </div>
           </div>
@@ -188,13 +181,11 @@ export const SWPCalculator: React.FC = () => {
                 <span className="text-brand-blue font-bold">Yr</span>
               </div>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="50" 
+            <Slider 
+              min={1} 
+              max={50} 
               value={years}
-              onChange={(e) => setYears(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+              onChange={setYears}
             />
           </div>
 
@@ -214,13 +205,11 @@ export const SWPCalculator: React.FC = () => {
                   <span className="text-brand-blue font-bold">Yr</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="0" 
+              <Slider 
+                min={0} 
                 max={years - 1}
                 value={defermentYears}
-                onChange={(e) => setDefermentYears(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                onChange={setDefermentYears}
               />
             </div>
 
@@ -239,13 +228,11 @@ export const SWPCalculator: React.FC = () => {
                   <span className="text-brand-blue font-bold">Mo</span>
                 </div>
               </div>
-              <input 
-                type="range" 
-                min="0" 
-                max="11"
+              <Slider 
+                min={0} 
+                max={11}
                 value={defermentMonths}
-                onChange={(e) => setDefermentMonths(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-blue"
+                onChange={setDefermentMonths}
               />
             </div>
           </div>
