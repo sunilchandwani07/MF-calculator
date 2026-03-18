@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
 import { Slider } from '../ui/Slider';
+import { generateWhatsAppMessage } from '../../utils/whatsappFormatter';
 
 export const SIPCalculator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'standard' | 'stepup' | 'homeloan'>('standard');
@@ -68,8 +69,44 @@ export const SIPCalculator: React.FC = () => {
 
     // Send WhatsApp message if number is provided (more than just the default '91' prefix)
     if (data.whatsapp && data.whatsapp.length > 2) {
-      const message = encodeURIComponent(`Hi from Invest & Insure! We guide you to build Wealth. Remember " Mutual Funds Sahi hai & Advisor Jaroori Hai".`);
-      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      let calculatorName = "SIP Calculator";
+      let inputs = [
+        { label: 'Monthly Investment', value: formatCurrency(effectiveMonthly) },
+        { label: 'Expected Return', value: `${effectiveRate}%` },
+        { label: 'Time Period', value: `${effectiveYears} Years` }
+      ];
+      let resultsData = [
+        { label: 'Invested Amount', value: formatCurrency(results.totalInvestment) },
+        { label: 'Est. Returns', value: formatCurrency(results.estimatedReturns) },
+        { label: 'Total Value', value: formatCurrency(results.futureValue) }
+      ];
+
+      if (activeTab === 'stepup') {
+        calculatorName = "Step-up SIP Calculator";
+        inputs.push({ label: 'Annual Step-up', value: stepUpType === 'percentage' ? `${effectiveStepUp}%` : formatCurrency(effectiveStepUp) });
+      } else if (activeTab === 'homeloan') {
+        calculatorName = "Home Loan Set-off SIP";
+        inputs = [
+          { label: 'Loan Amount', value: formatCurrency(loanAmount) },
+          { label: 'Loan Rate', value: `${loanRate}%` },
+          { label: 'Loan Tenure', value: `${loanTenure} Years` },
+          { label: 'SIP Return Rate', value: `${effectiveRate}%` }
+        ];
+        resultsData = [
+          { label: 'Monthly EMI', value: formatCurrency(homeLoanResults.emi) },
+          { label: 'Total Interest Payable', value: formatCurrency(homeLoanResults.totalInterest) },
+          { label: 'Recommended SIP', value: formatCurrency(homeLoanResults.sipRequired) }
+        ];
+      }
+
+      const message = generateWhatsAppMessage({
+        investorName: data.name,
+        investorAge: data.age,
+        calculatorName,
+        inputs,
+        results: resultsData
+      });
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
   };

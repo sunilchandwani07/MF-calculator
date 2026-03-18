@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
 import { Slider } from '../ui/Slider';
+import { generateWhatsAppMessage } from '../../utils/whatsappFormatter';
 
 export const SWPCalculator: React.FC = () => {
   const [lumpsum, setLumpsum] = useState(1000000);
@@ -49,8 +50,26 @@ export const SWPCalculator: React.FC = () => {
 
     // Send WhatsApp message if number is provided (more than just the default '91' prefix)
     if (data.whatsapp && data.whatsapp.length > 2) {
-      const message = encodeURIComponent(`Hi from Invest & Insure! We guide you to build Wealth. Remember " Mutual Funds Sahi hai & Advisor Jaroori Hai".`);
-      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      const message = generateWhatsAppMessage({
+        investorName: data.name,
+        investorAge: data.age,
+        calculatorName: "Systematic Withdrawal Plan (SWP)",
+        inputs: [
+          { label: 'Lumpsum Investment', value: formatCurrency(effectiveLumpsum) },
+          { label: 'Initial Monthly Withdrawal', value: formatCurrency(effectiveWithdrawal) },
+          { label: 'Annual Inflation', value: `${effectiveInflation}%` },
+          { label: 'Withdrawal Deferment', value: `${defermentYears} Years ${defermentMonths} Months` },
+          { label: 'Investment Duration', value: `${effectiveYears} Years` },
+          { label: 'Expected Return (Normal)', value: `${effectiveRate}%` }
+        ],
+        results: [
+          { label: 'Final Balance (Normal)', value: formatCurrency(results.finalBalance) },
+          { label: 'Total Withdrawn (Normal)', value: formatCurrency(results.totalWithdrawn) },
+          { label: 'Final Balance (Stress)', value: formatCurrency(stressResults.finalBalance) },
+          { label: 'Total Withdrawn (Stress)', value: formatCurrency(stressResults.totalWithdrawn) }
+        ]
+      });
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
   };

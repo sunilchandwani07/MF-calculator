@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
 import { Slider } from '../ui/Slider';
+import { generateWhatsAppMessage } from '../../utils/whatsappFormatter';
 
 export const LumpsumCalculator: React.FC = () => {
   const [investment, setInvestment] = useState(100000);
@@ -48,8 +49,22 @@ export const LumpsumCalculator: React.FC = () => {
 
     // Send WhatsApp message if number is provided (more than just the default '91' prefix)
     if (data.whatsapp && data.whatsapp.length > 2) {
-      const message = encodeURIComponent(`Hi from Invest & Insure! We guide you to build Wealth. Remember " Mutual Funds Sahi hai & Advisor Jaroori Hai".`);
-      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      const message = generateWhatsAppMessage({
+        investorName: data.name,
+        investorAge: data.age,
+        calculatorName: "Lumpsum Calculator",
+        inputs: [
+          { label: 'Total Investment', value: formatCurrency(effectiveInvestment) },
+          { label: 'Expected Return', value: `${effectiveRate}%` },
+          { label: 'Time Period', value: `${effectiveYears} Years` }
+        ],
+        results: [
+          { label: 'Invested Amount', value: formatCurrency(results.totalInvestment) },
+          { label: 'Est. Returns', value: formatCurrency(results.estimatedReturns) },
+          { label: 'Total Value', value: formatCurrency(results.futureValue) }
+        ]
+      });
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
   };

@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { ProposalModal } from '../modals/ProposalModal';
 import { ProposalTemplate } from './ProposalTemplate';
 import { Slider } from '../ui/Slider';
+import { generateWhatsAppMessage } from '../../utils/whatsappFormatter';
 
 export const GoalCalculator: React.FC = () => {
   const [targetAmount, setTargetAmount] = useState(1000000);
@@ -58,8 +59,24 @@ export const GoalCalculator: React.FC = () => {
 
     // Send WhatsApp message if number is provided (more than just the default '91' prefix)
     if (data.whatsapp && data.whatsapp.length > 2) {
-      const message = encodeURIComponent(`Hi from Invest & Insure! We guide you to build Wealth. Remember " Mutual Funds Sahi hai & Advisor Jaroori Hai".`);
-      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+      const message = generateWhatsAppMessage({
+        investorName: data.name,
+        investorAge: data.age,
+        calculatorName: "Goal Calculator",
+        inputs: [
+          { label: 'Target Goal (Today)', value: formatCurrency(effectiveTarget) },
+          { label: 'Time Period', value: `${effectiveYears} Years` },
+          { label: 'Expected Return', value: `${effectiveRate}%` },
+          { label: 'Inflation Rate', value: `${effectiveInflation}%` }
+        ],
+        results: [
+          { label: 'Inflation Adjusted Goal', value: formatCurrency(adjustedTarget) },
+          { label: 'Monthly SIP Required', value: formatCurrency(results.monthlyInvestment) },
+          { label: 'Total Investment', value: formatCurrency(results.totalInvestment) },
+          { label: 'Est. Returns', value: formatCurrency(results.estimatedReturns) }
+        ]
+      });
+      const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
   };
